@@ -6,7 +6,7 @@ Routes :
     * /register
     * /getprofile
     * /getprofiles
-    */:id/update
+    * /:id/update
 
 - /post
     * /newpost
