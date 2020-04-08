@@ -32,7 +32,7 @@ module.exports = {
     })
   },
   register: (req, res) => {
-    
+
     let newUser = new model({
       forename: req.body.forename,
       surname: req.body.surname,
@@ -50,28 +50,28 @@ module.exports = {
           res.send({ auth: false, msg: "Email already exists..." })
           return
         }
-        res.send({auth: false, msg: "An internal server error has occurred."})
+        res.send({ auth: false, msg: "An internal server error has occurred." })
       })
   },
 
 
   getProfile: (req, res) => {
-    
+
     let user_id = JSON.parse(JSON.stringify(jwtDecode(req.body.auth_token))).id;
-      console.log(user_id);
-    
-    
+
+
+
     model.findById(user_id)
       .then(user => {
         if (!user) {
-          console.log('*************'+user);
-          res.status(403).send({success: false, msg: "User not found"});
+
+          res.status(403).send({ success: false, msg: "User not found" });
         }
 
-        postModel.find({user_id: user_id})
+        postModel.find({ user_id: user_id })
           .then(posts => {
             res.send({
-              success: true, 
+              success: true,
               details: {
                 display_name: user.forename + ' ' + user.surname,
                 posts: posts
@@ -79,7 +79,26 @@ module.exports = {
             })
           })
       });
-      
-      
-  }
+
+
+  },
+  getprofiles: (req, res) => {
+    console.log("Get Profiles");
+    model.find()
+      .then(result => {
+        if (!result) {
+
+          res.send("there is no profiles");
+        }
+
+        res.send(result);
+      })
+  },
+
+  updateprofile: (req, res) => {
+    model.findByIdAndUpdate(req.params.id, { $set: req.body }, function (err, post) {
+      if (err) return next(err);
+      res.send({ "succes": true, "updated element(s)": req.body });
+    });
+  },
 }

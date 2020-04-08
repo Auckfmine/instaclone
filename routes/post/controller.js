@@ -12,7 +12,7 @@ module.exports = {
           res.send({ success: false, msg: "No user was found" });
           return;
         }
-        
+
         let newpost = new model({
           user_id: user_id,
           display_name: result.forename + ' ' + result.surname,
@@ -39,5 +39,28 @@ module.exports = {
         })
         res.send(result);
       });
-  }
+  },
+
+  getpost: (req, res) => {
+    model.findById(req.params.id, function (err, post) {
+
+      if (err) return next(err);
+      res.send(post);
+    })
+  },
+
+  updatepost: (req, res) => {
+    model.findByIdAndUpdate(req.params.id, { $set: req.body }, function (err, post) {
+      if (err) return next(err);
+      res.send({"succes":true , "updated element(s)":req.body});
+    });
+  },
+
+
+  deletepost : (req, res) => {
+    model.findByIdAndRemove(req.params.id, function (err) {
+        if (err) return next(err);
+        res.send({"succes":true,"msg":" Post Deleted successfully!"});
+    })
+}
 }
